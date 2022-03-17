@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta character set="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="table.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Mukta:wght@300;400;600;700;800&family=Noto+Sans:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+</head>
+
+<body style="background-color:  #004882;">
+    <div class="container mt-3">
+        <table id="myTable">
+            <tr>
+                <th>No:</th>
+                <th>Name:</th>
+                <th>Temperature:</th>
+                <th>Time of arrival:</th>
+            </tr>
+        </table>
+    </div>
+    <button class="material-icons" id="excelInst" onclick="myFunction()">file_download</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script>
+        var classs = localStorage.getItem("Class")
+        var date = localStorage.getItem("Date")
+        function myFunction() {
+            let data = document.getElementById('myTable');
+            var fp = XLSX.utils.table_to_book(data, { sheet: 'bvmg' });
+            XLSX.write(fp, {
+                bookType: 'xlsx',
+                type: 'base64'
+            });
+            name = classs + "(" + date + ")" + '.xlsx';
+            XLSX.writeFile(fp, name);
+        }
+    </script>
+    <script type="module">
+        window.onunload = function () {
+            isLogout = 1;
+            localStorage.setItem("logout", isLogout)
+        }
+        var classs = localStorage.getItem("Class")
+        var date = localStorage.getItem("Date")
+        var classUrl = "Attendance/" + date + "/" + classs;
+        var tempUrl = "Temp/" + date + "/" + classs + "Temp";
+        var timeUrl = "Timings/" + date + "/" + classs + "Timings";
+        var stdNo = 0;
+        var tbody = document.getElementById('tbody1');
+
+        function AddAllItemsToTable(TheStudent) {
+            var number = 1;
+            var strValClass;
+            var splitValClass;
+            var splitValLengthClass;
+            var strValTemp;
+            var splitValTemp;
+            var splitValLengthTemp;
+            var strValTime;
+            var splitValTime;
+            var splitValLengthTime;
+            var val = 0;
+            let i = 0;
+            stdNo = 0;
+            console.log("Function is running")
+            const dbref = ref(db);
+            get(child(dbref, classUrl)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    strValClass = snapshot.val();
+                    splitValClass = strValClass.split(',');
+                    splitValLengthClass = splitValClass.length;
+                    console.log(splitValClass);
+                    console.log("Length = ", splitValLengthClass);
+                }
+            });
+            get(child(dbref, tempUrl)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    strValTemp = snapshot.val();
+                    splitValTemp = strValTemp.split(',');
+                    splitValLengthTemp = splitValTemp.length;
+                    console.log(splitValTemp);
+                    console.log("Length Time = ", splitValLengthTemp);
+                }
+            });
+            get(child(dbref, timeUrl)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    strValTime = snapshot.val();
+                    splitValTime = strValTime.split(',');
+                    splitValLengthTime = splitValTime.length;
+                    console.log(splitValTime);
+                    console.log("Length Time = ", splitValLengthTime);
+                    for (i = 0; i < splitValLengthTemp; i++) {
+                        var table = document.getElementById("myTable");
+                        var row = table.insertRow(-1);
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        var cell3 = row.insertCell(2);
+                        var cell4 = row.insertCell(3);
+                        cell1.innerHTML = number;
+                        cell2.innerHTML = strValClass.split(',')[i];
+                        cell3.innerHTML = strValTemp.split(',')[i]+"°";
+                        cell4.innerHTML = strValTime.split(',')[i];
+                        number = number + 1;
+
+                    }
+                }
+            });
+        }
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyAEmhJFotfwHa49BOB2gCmPXS36nE2J6gM",
+            authDomain: "attendance-system-57df7.firebaseapp.com",
+            databaseURL: "https://attendance-system-57df7-default-rtdb.firebaseio.com",
+            projectId: "attendance-system-57df7",
+            storageBucket: "attendance-system-57df7.appspot.com",
+            messagingSenderId: "1038539515204",
+            appId: "1:1038539515204:web:35fd7afeadd6758eaa6311"
+        };
+        const app = initializeApp(firebaseConfig);
+        import { getDatabase, ref, get, set, child, update, onValue, remove }
+            from "https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js";
+        const db = getDatabase();
+        function GetAllDataOnce() {
+            const dbRef = ref(db);
+        }
+        window.onload = function (){
+        var logoutVal = localStorage.getItem("logout")
+            if(logoutVal == 1){
+                window.location.href = "index.html";
+            }
+            else{
+                AddAllItemsToTable();
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

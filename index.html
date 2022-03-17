@@ -1,0 +1,80 @@
+<html>
+<head>
+  <title> Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed&family=Poppins:wght@600&family=Ubuntu:wght@500&display=swap"
+    rel="stylesheet">
+  <script defer src="main.js"></script>
+</head>
+<body>
+  <div class="loginbox">
+    <img src="logo.png" class="avatar" id="imgLogin">
+    <h1>Login here</h1>
+    <form id="login-form">
+      <p>Username</p>
+      <input type="text" name="username" id="userinput" class="login-form-field" placeholder="Enter Username">
+      <p>Password</p>
+      <input type="password" name="password" id="password-field" class="login-form-field" placeholder="Enter Password">
+      <input type="submit" value="Login" id="login-form-submit">
+    </form>
+  </div>
+  <script type="module">
+
+    var dbUser;
+    var dbPass;
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.4/firebase-app.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyAEmhJFotfwHa49BOB2gCmPXS36nE2J6gM",
+      authDomain: "attendance-system-57df7.firebaseapp.com",
+      databaseURL: "https://attendance-system-57df7-default-rtdb.firebaseio.com",
+      projectId: "attendance-system-57df7",
+      storageBucket: "attendance-system-57df7.appspot.com",
+      messagingSenderId: "1038539515204",
+      appId: "1:1038539515204:web:35fd7afeadd6758eaa6311"
+    };
+    const app = initializeApp(firebaseConfig);
+    import { getDatabase, ref, get, set, child, update, remove }
+      from "https://www.gstatic.com/firebasejs/9.6.4/firebase-database.js"
+    const db = getDatabase();
+    selectData()
+    function selectData() {
+      console.log("Function is running")
+      const dbref = ref(db);
+      get(child(dbref, "Credentials/Username")).then((snapshot) => {
+        if (snapshot.exists()) {
+          dbUser = snapshot.val();
+        }
+      });
+      get(child(dbref, "Credentials/Password")).then((snapshot) => {
+        if (snapshot.exists()) {
+          dbPass = snapshot.val();
+        }
+      });
+      const loginForm = document.getElementById("login-form");
+      const loginButton = document.getElementById("login-form-submit");
+      loginButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        const username = loginForm.username.value;
+        const password = loginForm.password.value;
+        if (username == dbUser && password == dbPass) {
+          localStorage.setItem("loggedIn", "true");
+          localStorage.setItem("logout", 0);
+          window.location.href = "home.html";
+        } else if(username==dbUser && password !== dbPass) {
+          alert("Password is incorrect");
+        }
+        else if(username !== dbUser && password==dbPass){
+          alert("Username is incorrect");
+        }
+        else{
+          alert("Incorrect Credentials"); 
+        }
+      })
+    }
+  </script>
+</body>
+</html>

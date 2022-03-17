@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto');
+*{
+ margin:0;
+ padding: 0;
+ outline: 0;
+background:  #004882;
+
+}
+
+.filter{
+ position: absolute;
+ left: 0;
+ top: 0;
+ bottom: 0;
+ right: 0;
+ z-index: 1;
+ background: rgb(28, 13, 168);
+background: -moz-linear-gradient(90deg,  rgb(28, 13, 168) 0%,  rgb(28, 13, 168) 100%);
+background: -webkit-linear-gradient(90deg,  rgb(28, 13, 168) 0%,  rgb(28, 13, 168) 100%);
+background: linear-gradient(90deg, rgb(28, 13, 168) 0%, rgb(28, 13, 168) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr= rgb(28, 13, 168),endColorstr= rgb(28, 13, 168),GradientType=1);
+opacity: .7;
+}
+table{
+ position: absolute;
+ z-index: 2;
+ left: 50%;
+ transform: translate(-50%,0%);
+ width: 60%; 
+ border-collapse: collapse;
+ border-spacing: 0;
+ box-shadow: 0 2px 15px rgba(255, 255, 255, 0.7);
+ border-radius: 12px 12px 12px 12px;
+ overflow: hidden;
+
+}
+td , th{
+ padding: 15px 20px;
+ text-align: center;
+ 
+
+}
+th{
+ background-color: rgb(255, 255, 255);
+ font-size:20px;
+ color: #000000;
+ font-weight: 800;
+
+
+}
+tr{
+ width: 100%;
+ background-color: #fafafa;
+ font-family: 'Montserrat', sans-serif;
+ color: white;
+}
+tr:nth-child(even){
+ background-color: #ffffff;
+}
+#excelInst  {
+    font-size:30px;
+    background-color:  #004882;
+    color: white;
+    border-radius: 6px;
+    background:none;
+    outline: none;    
+    border: none;
+    box-shadow: 0 2px 15px rgba(255, 255, 255, 0.7);
+
+}
